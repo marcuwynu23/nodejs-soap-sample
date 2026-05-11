@@ -1,4 +1,4 @@
-# SOAP Hello Service Demo
+# nodejs-soap-example
 
 This project demonstrates a simple SOAP API implementation using Node.js with a web client.
 
