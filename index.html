@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SOAP Demo</title>
+</head>
+
+<body>
+    <h1>SOAP Hello Service</h1>
+
+    <input type="text" id="name" placeholder="Enter name" value="World">
+    <button onclick="sayHello()">Say Hello</button>
+
+    <p id="result"></p>
+
+    <script>
+        async function sayHello() {
+            const name = document.getElementById('name').value;
+            const resultP = document.getElementById('result');
+
+            const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://example.com/hello">
+  <soap:Body>
+    <tns:HelloRequest>
+      <name>${name}</name>
+    </tns:HelloRequest>
+  </soap:Body>
+</soap:Envelope>`;
+
+            try {
+                const response = await fetch('http://localhost:8000/hello', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/xml',
+                        'SOAPAction': 'Hello'
+                    },
+                    body: xml
+                });
+
+                const text = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/xml');
+                const greeting = doc.getElementsByTagName('greeting')[0]?.textContent;
+
+                resultP.textContent = greeting || 'Error parsing response';
+            } catch (err) {
+                resultP.textContent = 'Error: ' + err.message;
+            }
+        }
+    </script>
+</body>
+
+</html>
