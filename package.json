@@ -1,17 +1,23 @@
 {
   "name": "nodejs-soap-example",
   "version": "1.0.0",
-  "description": "SOAP API demonstration with Node.js",
-  "main": "index.js",
+  "description": "SOAP API demonstration with Node.js and TypeScript",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node index.js",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["soap", "api", "calculator"],
+  "keywords": ["soap", "api", "calculator", "typescript"],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "soap": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   }
 }

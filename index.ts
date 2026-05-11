@@ -1,19 +1,27 @@
-const soap = require('soap');
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
+import * as soap from 'soap';
+import * as http from 'http';
+import * as fs from 'fs';
+import * as path from 'path';
+
+// Types for the SOAP service
+interface HelloArgs {
+  name: string;
+}
+
+interface HelloResponse {
+  greeting: string;
+}
 
 // Simple SOAP service - just one operation
 const service = {
   HelloService: {
     HelloPort: {
-      // Simple hello operation
-      Hello: function(args) {
+      Hello: function (args: HelloArgs): HelloResponse {
         return { greeting: 'Hello, ' + args.name + '!' };
       }
     }
   }
-};
+} as const;
 
 // Minimal WSDL
 const wsdl = `<?xml version="1.0" encoding="UTF-8"?>
@@ -75,12 +83,12 @@ const wsdl = `<?xml version="1.0" encoding="UTF-8"?>
 </definitions>`;
 
 // HTTP server
-const server = http.createServer((req, res) => {
+const server = http.createServer((req: http.IncomingMessage, res: http.ServerResponse) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
 
   // Serve HTML
   if (req.url === '/' || req.url === '/index.html') {
-    fs.readFile(path.join(__dirname, 'index.html'), (err, data) => {
+    fs.readFile(path.join(__dirname, '..', 'index.html'), (err, data) => {
       if (err) {
         res.writeHead(500);
         res.end('Error');
@@ -105,7 +113,7 @@ const server = http.createServer((req, res) => {
 
 // Start server
 const PORT = 8000;
-soap.listen(server, '/hello', service, wsdl);
+soap.listen(server, '/hello', service as any, wsdl);
 server.listen(PORT, () => {
   console.log(`Server: http://localhost:${PORT}`);
   console.log(`SOAP: http://localhost:${PORT}/hello`);
