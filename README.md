@@ -52,12 +52,12 @@ sequenceDiagram
 
 ### 1. Install Dependencies
 ```bash
-npm install
+pnpm install
 ```
 
 ### 2. Start the Server
 ```bash
-npm start
+pnpm start
 ```
 
 ### 3. Access the Application
